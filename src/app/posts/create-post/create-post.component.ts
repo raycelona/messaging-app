@@ -24,6 +24,5 @@ export class CreatePostComponent implements OnInit {
         form.resetForm();
     }
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 }
