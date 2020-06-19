@@ -19,7 +19,7 @@ export class PostListComponent implements OnInit, OnDestroy{
         this.postSvc.getPosts();
         this.subscription = this.postSvc.getActivePostListener().subscribe((posts: Posts[]) => {
             this.posts = posts;
-        }); 
+        });
     }
 
     delete(index: number) {

@@ -1,7 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const Post = require('./models/post');
 
 const app = express();
+
+mongoose.connect('mongodb+srv://Ray:HlykA5HKxWU5bSJQ@cluster0-46bnn.mongodb.net/message-book?retryWrites=true&w=majority')
+    .then(() => {
+        console.log('Connection established');
+    })
+    .catch(() => {
+        console.log('Connection failed');
+    });
 
 app.use(bodyParser.json())
 
@@ -15,22 +25,27 @@ app.use((req, res, next) => {
 });
 
 app.post('/api/posts', (req, res, next) => {
-    const post = req.body;
-    console.log(post);
+    const post = new Post({
+       title: req.body.title,
+       body: req.body.body
+    });
+    post.save();
     res.status(201).json({
         message: post
     })
 });
 
 app.get('/api/posts', (req,res, next) => {
-    const posts = [
-        {id: '4567456347856ur', title: 'First post', body: 'Server post'},
-        {id: 'ewvwshtrhe56j356', title: 'Second post', body: 'Server post two'}
-    ];
-    res.status(200).json({
-        message: 'Success',
-        posts: posts
+    Post.find().then(documents => {
+        res.status(200).json({
+            message: 'Success',
+            posts: documents
+        });
     });
 });
+
+// app.delete('/api/posts/id', (req, res, next) => {
+
+// });
 
 module.exports = app;
