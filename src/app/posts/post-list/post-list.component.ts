@@ -22,8 +22,8 @@ export class PostListComponent implements OnInit, OnDestroy{
         });
     }
 
-    delete(index: number) {
-        this.postSvc.deletePost(index);
+    delete(id: string) {
+        this.postSvc.deletePost(id);
     }
 
     ngOnDestroy(): void {

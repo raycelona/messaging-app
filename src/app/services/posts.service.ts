@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Posts } from '../posts/posts.model'; 
 import { Subject } from "rxjs";
+import { map } from 'rxjs/operators'
 
 @Injectable({providedIn: 'root'})
 
@@ -13,18 +14,32 @@ export class PostsService {
     activePosts = new Subject<Posts[]>()
 
     getPosts() {
-        this.http.get<{message: string, posts: Posts[]}>('http://localhost:3000/api/posts').subscribe(
-            (data) => {
-                this.posts = data.posts;
+        this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
+        .pipe(map(data => {
+            return data.posts.map(post => {
+                return {
+                    title: post.title,
+                    body: post.body,
+                    id: post._id
+                }
+            })
+        }))
+        .subscribe(newValues => {
+                this.posts = newValues;
                 this.activePosts.next([...this.posts]);
             },
             (err) => {}
         );
     }
 
-    deletePost(index: number) {
-        this.posts.splice(index, 1);
-        this.activePosts.next([...this.posts]);
+    deletePost(id: string) {
+        this.http.delete('http://localhost:3000/api/posts/' + id)
+        .subscribe(() => {
+            console.log('deleted post #', id);
+            const deletedPosts = this.posts.filter(deleted => deleted.id !== id)
+            this.posts = deletedPosts;
+            this.activePosts.next([...deletedPosts]);
+        });
     }
 
     getActivePostListener() {

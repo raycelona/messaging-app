@@ -6,6 +6,6 @@
     </div>
     <div>{{post.body}}</div>
     <button>Edit</button>
-    <button (click)="delete(i)">Delete</button>
+    <button (click)="delete(post.id)">Delete</button>
 </div>
 <div *ngIf="posts.length === 0">Start talkin'...</div>
