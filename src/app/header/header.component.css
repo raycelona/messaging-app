@@ -1,0 +1,31 @@
+header {
+    background-color: #283e4a;
+    padding: .5em;
+}
+header a {
+    color: #FFF;
+    text-decoration: none;
+}
+
+header a:hover {
+    background-color: #563e4b;
+}
+
+header ul {
+    list-style: none;
+    clear: right;
+}
+header ul li:first-child {
+    float: left;
+    width: 40%;
+}
+header ul li:last-child {
+    float: right;
+    width: 40%;
+}
+header ul .logo {
+    font-size: 16pt;
+}
+.clear {
+    clear: both;
+}

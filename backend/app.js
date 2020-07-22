@@ -1,11 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const Post = require('./models/post');
+
+const postRoutes = require('./routes/posts');
 
 const app = express();
-
-mongoose.connect('mongodb+srv://Ray:HlykA5HKxWU5bSJQ@cluster0-46bnn.mongodb.net/message-book?retryWrites=true&w=majority')
+//SvbYciEvxsQUWAZN
+mongoose.connect('mongodb+srv://ray:SvbYciEvxsQUWAZN@messaging-cluster.4jqee.mongodb.net/<dbname>?retryWrites=true&w=majority')
     .then(() => {
         console.log('Connection established');
     })
@@ -20,35 +21,10 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 
         'Origin, X-Requested-With, Content-Type, Accept');
     res.setHeader('Access-Control-Allow-Methods', 
-        'GET, POST, PATCH, DELETE, OPTIONS');
+        'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     next();
 });
 
-app.post('/api/posts', (req, res, next) => {
-    const post = new Post({
-       title: req.body.title,
-       body: req.body.body
-    });
-    post.save();
-    res.status(201).json({
-        message: post
-    })
-});
-
-app.get('/api/posts', (req,res, next) => {
-    Post.find().then(documents => {
-        res.status(200).json({
-            message: 'Success',
-            posts: documents
-        });
-    });
-});
-
-app.delete('/api/posts/:id', (req, res, next) => {
-    Post.deleteOne({_id: req.params.id}).then(result => {
-        console.log(result);
-        res.status(200).json({message: 'deleted'});
-    })
-});
+app.use('/api/posts', postRoutes)
 
 module.exports = app;
